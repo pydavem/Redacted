@@ -48,6 +48,7 @@ def select_folder():
         p = Path(path).rglob('*.txt')
         for file in p:
             if not new_files.count(file):
+                # keep track of files we have created, we don't want to redact them
                 print(f'Processing {file}')
                 new_file = redactor.redact_file(file, redactIPs.get(),
                                                 redactLogins.get(), redactMachines.get())
