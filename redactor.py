@@ -17,7 +17,7 @@ def get_out_filename(fnm):
     return 'redacted-'+fname
 
 
-def redact_file(localfile, redactips, redactlogins, redactmachines):
+def redact_file(localfile, redactips, redactlogins, redactmachines, redactmacs):
     """ redact a single file """
 
     new_file = None
@@ -27,18 +27,19 @@ def redact_file(localfile, redactips, redactlogins, redactmachines):
         with open(new_file, 'w', encoding='utf-8') as out_file:
             for pre in in_file:
                 post = redact_line(
-                    pre, redactips, redactlogins, redactmachines)
+                    pre, redactips, redactlogins, redactmachines, redactmacs)
                 out_file.writelines(post)
 
     return new_file
 
 
-def redact_line(text, redactips, redactlogins, redactmachines):
+def redact_line(text, redactips, redactlogins, redactmachines, redactmacs):
     """ redact a single line """
 
     ret = text
 
     if redactips:
+        # redact IPs (n.n.n.n converted to x.x.x.x)
         last = 0
         idx = 0
         count = 0
@@ -59,7 +60,6 @@ def redact_line(text, redactips, redactlogins, redactmachines):
             else:
                 if maybe:
                     # strip from start to here
-                    print(f'Found one at {start}')
                     ret += text[last:start]
                     ret += 'x.x.x.x'
                     last = idx
@@ -77,5 +77,57 @@ def redact_line(text, redactips, redactlogins, redactmachines):
         elif last < idx:
             # add any remaining characters to the string
             ret += text[last:]
+
+    if redactlogins:
+        idx = 0
+        for c in ret:
+            if c.isspace():
+                break
+            if c == '@':
+                if idx:
+                    ret = 'username'+ret[idx:]
+                break
+            idx += 1
+
+    if redactmachines:
+        start = 0
+        idx = 0
+        for c in ret:
+            if c.isspace():
+                break
+            if c == '@' and not start:
+                start = idx
+            if start and c == '>' or c == '$':
+                ret = ret[:start+1]+'machine'+ret[idx:]
+                break
+            idx += 1
+
+    if redactmacs:
+        found = 1
+        while found:
+            digit = 0   # 2 digits between ':'s
+            found = 0   # check more than once per line, recursive because i'm lazy!
+            start = -1
+            count = 0
+            idx = 0
+            for c in ret:
+                if (c >= '0' and c <= '9') or (c >= 'A' and c <= 'F') or (c >= 'a' and c <= 'f'):
+                    digit += 1
+                    if digit > 2:
+                        start = -1
+                        count = 0
+                        digit = 0
+                    else:
+                        if start == -1:
+                            start = idx
+                        count += 1
+                        if count == 12:
+                            ret = ret[:start]+'--:--:--:--:--:--'+ret[idx+1:]
+                            found = 1
+                            break
+                elif not c == ':':
+                    start = -1
+                    count = 0
+                idx += 1
 
     return ret

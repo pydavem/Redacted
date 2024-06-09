@@ -9,25 +9,33 @@ import redactor
 def on_readact_ips_toggle():
     """ toggle the variable for IP redaction """
     if redactIPs.get() == 1:
-        print("Checkbutton is selected")
+        print("IPs are selected")
     else:
-        print("Checkbutton is deselected")
+        print("IPS are deselected")
 
 
 def on_readact_logins_toggle():
     """ toggle the variable for Logins redaction """
     if redactLogins.get() == 1:
-        print("Checkbutton is selected")
+        print("Logins are selected")
     else:
-        print("Checkbutton is deselected")
+        print("Logins are deselected")
 
 
 def on_readact_machines_toggle():
     """ toggle the variable for Machine Names redaction """
     if redactLogins.get() == 1:
-        print("Checkbutton is selected")
+        print("Machines are selected")
     else:
-        print("Checkbutton is deselected")
+        print("Machines are deselected")
+
+
+def on_readact_macs_toggle():
+    """ toggle the variable for MAC redactions """
+    if redactMacs.get():
+        print("MACs are selected")
+    else:
+        print("MACs are deselected")
 
 
 def select_file():
@@ -36,7 +44,7 @@ def select_file():
 
     if file:
         redactor.redact_file(file, redactIPs.get(),
-                             redactLogins.get(), redactMachines.get())
+                             redactLogins.get(), redactMachines.get(), redactMacs.get())
 
 
 def select_folder():
@@ -50,8 +58,11 @@ def select_folder():
             if not new_files.count(file):
                 # keep track of files we have created, we don't want to redact them
                 print(f'Processing {file}')
-                new_file = redactor.redact_file(file, redactIPs.get(),
-                                                redactLogins.get(), redactMachines.get())
+                new_file = redactor.redact_file(file,
+                                                redactIPs.get(),
+                                                redactLogins.get(),
+                                                redactMachines.get(),
+                                                redactMacs.get())
                 new_files.append(new_file)
             else:
                 print(f'not processing new file {file}')
@@ -74,7 +85,7 @@ btm_frame.grid(row=3, sticky="ew")
 btm_frame2.grid(row=4, sticky="ew")
 
 redactIPs = tk.IntVar(master=top_frame)
-checkbutton_ips = tk.Checkbutton(top_frame, text="Redact IP's", variable=redactIPs,
+checkbutton_ips = tk.Checkbutton(top_frame, text="Redact IPs", variable=redactIPs,
                                  onvalue=1, offvalue=0, command=on_readact_ips_toggle)
 checkbutton_ips.config(bg="lightgrey", fg="blue", font=("Arial", 12),
                        selectcolor="green", relief="raised", padx=10, pady=5)
@@ -86,7 +97,7 @@ redactLogins = tk.IntVar(master=top_frame)
 checkbutton_logins = tk.Checkbutton(top_frame, text="Redact Logins", variable=redactLogins,
                                     onvalue=1, offvalue=0, command=on_readact_logins_toggle)
 checkbutton_logins.config(bg="lightgrey", fg="blue", font=("Arial", 12),
-                          selectcolor="green", relief="raised", padx=10, pady=5,state="disabled")
+                          selectcolor="green", relief="raised", padx=10, pady=5)
 
 # Placing the Checkbutton in the window
 checkbutton_logins.pack(padx=40, pady=4)
@@ -96,10 +107,21 @@ checkbutton_machines = tk.Checkbutton(top_frame, text="Redact Machine Names",
                                       variable=redactMachines,
                                       onvalue=1, offvalue=0, command=on_readact_machines_toggle)
 checkbutton_machines.config(bg="lightgrey", fg="blue", font=("Arial", 12),
-                            selectcolor="green", relief="raised", padx=10, pady=5,state="disabled")
+                            selectcolor="green", relief="raised", padx=10, pady=5)
 
 # Placing the Checkbutton in the window
 checkbutton_machines.pack(padx=40, pady=4)
+
+redactMacs = tk.IntVar(master=top_frame)
+checkbutton_macs = tk.Checkbutton(top_frame, text="Redact MACs",
+                                  variable=redactMacs,
+                                  onvalue=1, offvalue=0, command=on_readact_macs_toggle)
+checkbutton_macs.config(bg="lightgrey", fg="blue", font=("Arial", 12),
+                        selectcolor="green", relief="raised", padx=10, pady=5)
+
+# Placing the Checkbutton in the window
+checkbutton_macs.pack(padx=40, pady=4)
+
 
 button_file = tk.Button(center, text='Select a File', command=select_file)
 button_folder = tk.Button(
