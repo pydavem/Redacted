@@ -17,8 +17,9 @@ def get_out_filename(fnm):
     return 'redacted-'+fname
 
 
-def redact_file(localfile, redactips, redactlogins, redactmachines, redactmacs):
+def redact_file(localfile, *opts):
     """ redact a single file """
+    redactips, redactlogins, redactmachines, redactmacs = opts
 
     new_file = None
 
@@ -33,9 +34,9 @@ def redact_file(localfile, redactips, redactlogins, redactmachines, redactmacs):
     return new_file
 
 
-def redact_line(text, redactips, redactlogins, redactmachines, redactmacs):
+def redact_line(text, *opts):
     """ redact a single line """
-
+    redactips, redactlogins, redactmachines, redactmacs = opts
     ret = text
 
     if redactips:
