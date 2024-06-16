@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Daves Wonderful Redactor Program</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="gridLayoutWidget">
@@ -26,6 +26,9 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <widget class="QCheckBox" name="checkBoxIP">
+       <property name="toolTip">
+        <string>Redacts IP addresses, replacing them with x.x.x.x</string>
+       </property>
        <property name="text">
         <string>Redact IPs</string>
        </property>
@@ -33,6 +36,9 @@
      </item>
      <item row="1" column="0">
       <widget class="QCheckBox" name="checkBoxLogins">
+       <property name="toolTip">
+        <string>Redact user names from start of lines upto the first '@' symbol</string>
+       </property>
        <property name="text">
         <string>Redact Logins</string>
        </property>
@@ -40,6 +46,9 @@
      </item>
      <item row="2" column="0">
       <widget class="QCheckBox" name="checkBoxMachines">
+       <property name="toolTip">
+        <string>Redact machine names after the first '@' symbol and before the next '&gt;' or ';' symbols</string>
+       </property>
        <property name="text">
         <string>Redact Machine Names</string>
        </property>
@@ -47,6 +56,9 @@
      </item>
      <item row="3" column="0">
       <widget class="QCheckBox" name="checkBoxMAC">
+       <property name="toolTip">
+        <string>Redact MAC addresses, replacing them with --:--:--:--:--:--</string>
+       </property>
        <property name="text">
         <string>Redact MACs</string>
        </property>
@@ -66,6 +78,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pushButton_openFile">
+       <property name="toolTip">
+        <string>Select a single file to redact</string>
+       </property>
        <property name="text">
         <string>Select a File</string>
        </property>
@@ -73,6 +88,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_openFolder">
+       <property name="toolTip">
+        <string>Select a folder (recursively) to redact *.txt files found</string>
+       </property>
        <property name="text">
         <string>Select a Folder</string>
        </property>

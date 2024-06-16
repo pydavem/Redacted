@@ -1,9 +1,26 @@
 """ Main program """
 import sys
 from pathlib import Path
-from PyQt6 import QtWidgets
+from PyQt6 import QtWidgets, QtCore
 import redactor
-import mainWindow
+import mainWindow_ui
+
+
+def save_options(window):
+    """ Save options to file """
+    QtCore.QSettings().setValue('options', (window.checkBoxIP.isChecked(),
+                                            window.checkBoxLogins.isChecked(),
+                                            window.checkBoxMAC.isChecked(),
+                                            window.checkBoxLogins.isChecked()))
+
+
+def read_options(window):
+    """ Read options from file """
+    options = QtCore.QSettings().value('options', (True, True, True, True))
+    window.checkBoxIP.setChecked(options[0])
+    window.checkBoxLogins.setChecked(options[1])
+    window.checkBoxMAC.setChecked(options[2])
+    window.checkBoxLogins.setChecked(options[3])
 
 
 def get_options(window):
@@ -27,18 +44,23 @@ def openfolder(window):
     folder_path = QtWidgets.QFileDialog.getExistingDirectory(
         None, "Open Folder")
     if folder_path:
-        for file_path in Path(folder_path).glob('*'):
+        for file_path in Path(folder_path).glob('*.txt'):
             redactor.redact_file(file_path, *get_options(window))
 
 
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
-ui = mainWindow.Ui_MainWindow()
+ui = mainWindow_ui.Ui_MainWindow()
 ui.setupUi(MainWindow)
+read_options(ui)
 
 ui.pushButton_openFile.pressed.connect(lambda: openfile(ui))
 ui.pushButton_openFolder.pressed.connect(lambda: openfolder(ui))
 
 
 MainWindow.show()
-sys.exit(app.exec())
+
+exitcode = app.exec()
+if not exitcode:
+    save_options(ui)
+sys.exit(exitcode)
