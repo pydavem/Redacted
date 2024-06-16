@@ -27,37 +27,30 @@ class Ui_MainWindow(object):
         self.checkBoxLogins = QtWidgets.QCheckBox(parent=self.gridLayoutWidget)
         self.checkBoxLogins.setObjectName("checkBoxLogins")
         self.gridLayout.addWidget(self.checkBoxLogins, 1, 0, 1, 1)
-        self.checkBoxMachines = QtWidgets.QCheckBox(
-            parent=self.gridLayoutWidget)
+        self.checkBoxMachines = QtWidgets.QCheckBox(parent=self.gridLayoutWidget)
         self.checkBoxMachines.setObjectName("checkBoxMachines")
         self.gridLayout.addWidget(self.checkBoxMachines, 2, 0, 1, 1)
         self.checkBoxMAC = QtWidgets.QCheckBox(parent=self.gridLayoutWidget)
         self.checkBoxMAC.setObjectName("checkBoxMAC")
         self.gridLayout.addWidget(self.checkBoxMAC, 3, 0, 1, 1)
-        self.horizontalLayoutWidget = QtWidgets.QWidget(
-            parent=self.centralwidget)
+        self.horizontalLayoutWidget = QtWidgets.QWidget(parent=self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(280, 0, 511, 151))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(
-            self.horizontalLayoutWidget)
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pushButton_openFile = QtWidgets.QPushButton(
-            parent=self.horizontalLayoutWidget)
+        self.pushButton_openFile = QtWidgets.QPushButton(parent=self.horizontalLayoutWidget)
         self.pushButton_openFile.setObjectName("pushButton_openFile")
         self.horizontalLayout.addWidget(self.pushButton_openFile)
-        self.pushButton_openFolder = QtWidgets.QPushButton(
-            parent=self.horizontalLayoutWidget)
+        self.pushButton_openFolder = QtWidgets.QPushButton(parent=self.horizontalLayoutWidget)
         self.pushButton_openFolder.setObjectName("pushButton_openFolder")
         self.horizontalLayout.addWidget(self.pushButton_openFolder)
         self.listView = QtWidgets.QListView(parent=self.centralwidget)
         self.listView.setGeometry(QtCore.QRect(15, 151, 771, 401))
-        self.listView.viewport().setProperty(
-            "cursor", QtGui.QCursor(QtCore.Qt.CursorShape.BlankCursor))
+        self.listView.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.CursorShape.BlankCursor))
         self.listView.setProperty("showDropIndicator", False)
         self.listView.setDefaultDropAction(QtCore.Qt.DropAction.IgnoreAction)
-        self.listView.setSelectionMode(
-            QtWidgets.QAbstractItemView.SelectionMode.NoSelection)
+        self.listView.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.NoSelection)
         self.listView.setObjectName("listView")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
@@ -87,33 +80,20 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow",
-                                             "Daves Wonderful Redactor Program"))
-        self.checkBoxIP.setToolTip(_translate("MainWindow",
-                                              "Redacts IP addresses, replacing them with x.x.x.x"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Daves Wonderful Redactor Program"))
+        self.checkBoxIP.setToolTip(_translate("MainWindow", "Redacts IP addresses, replacing them with x.x.x.x"))
         self.checkBoxIP.setText(_translate("MainWindow", "Redact IPs"))
-        self.checkBoxLogins.setToolTip(_translate("MainWindow",
-                                                  "Redact user names from start of lines upto the first \'@\' symbol"))
+        self.checkBoxLogins.setToolTip(_translate("MainWindow", "Redact user names from start of lines upto the first \'@\' symbol"))
         self.checkBoxLogins.setText(_translate("MainWindow", "Redact Logins"))
-        self.checkBoxMachines.setToolTip(_translate("MainWindow",
-                                                    "Redact machine names after the first \'@\' symbol \
-                  and before the next \'>\' or \';\' symbols"))
-        self.checkBoxMachines.setText(_translate(
-            "MainWindow", "Redact Machine Names"))
-        self.checkBoxMAC.setToolTip(_translate("MainWindow",
-                                               "Redact MAC addresses, replacing them with --:--:--:--:--:--"))
+        self.checkBoxMachines.setToolTip(_translate("MainWindow", "Redact machine names after the first \'@\' symbol and before the next \'>\' or \';\' symbols"))
+        self.checkBoxMachines.setText(_translate("MainWindow", "Redact Machine Names"))
+        self.checkBoxMAC.setToolTip(_translate("MainWindow", "Redact MAC addresses, replacing them with --:--:--:--:--:--"))
         self.checkBoxMAC.setText(_translate("MainWindow", "Redact MACs"))
-        self.pushButton_openFile.setToolTip(_translate("MainWindow",
-                                                       "Select a single file to redact"))
-        self.pushButton_openFile.setText(
-            _translate("MainWindow", "Select a File"))
-        self.pushButton_openFolder.setToolTip(_translate("MainWindow",
-                                                         "Select a folder (recursively) to redact *.txt files found"))
-        self.pushButton_openFolder.setText(_translate("MainWindow",
-                                                      "Select a Folder"))
+        self.pushButton_openFile.setToolTip(_translate("MainWindow", "Select a single file to redact"))
+        self.pushButton_openFile.setText(_translate("MainWindow", "Select a File"))
+        self.pushButton_openFolder.setToolTip(_translate("MainWindow", "Select a folder (recursively) to redact *.txt files found"))
+        self.pushButton_openFolder.setText(_translate("MainWindow", "Select a Folder"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
-        self.actionOpen_File.setText(_translate("MainWindow",
-                                                "Open File"))
-        self.actionOpen_Folder.setText(_translate("MainWindow",
-                                                  "Open Folder"))
+        self.actionOpen_File.setText(_translate("MainWindow", "Open File"))
+        self.actionOpen_Folder.setText(_translate("MainWindow", "Open Folder"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
