@@ -13,7 +13,7 @@ class Results:
 
     def add_file(self, file):
         """ add a new redacted file """
-        self.files = file
+        self.file = file
 
     def add_ip(self):
         """ increment the ip value """
@@ -30,3 +30,8 @@ class Results:
     def add_machine(self):
         """ increment the machines counter """
         self.machines += 1
+
+    def is_empty(self):
+        """ return true if no results are present """
+        return self.ips == 0 and self.logins == 0 and self.macs == 0 and self.machines == 0
+    

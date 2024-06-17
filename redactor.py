@@ -14,6 +14,8 @@ def get_out_filename(fnm):
         now = str(fname).find('/', last+1)
 
     if last >= 0:
+        if fname[last+1:last+10] == 'redacted-':
+            return None
         return fname[:last+1]+'redacted-'+fname[last+1:]
 
     return 'redacted-'+fname
@@ -22,20 +24,25 @@ def get_out_filename(fnm):
 def redact_file(localfile, *opts):
     """ redact a single file """
     redactips, redactlogins, redactmachines, redactmacs = opts
-    res = Results()
 
+    res = Results()
     new_file = None
 
     with open(localfile, 'r', encoding='utf-8') as in_file:
         new_file = get_out_filename(localfile)
+        if new_file is None:
+            return None
         with open(new_file, 'w', encoding='utf-8') as out_file:
             for pre in in_file:
                 post = redact_line(
                     pre, res, redactips, redactlogins, redactmachines, redactmacs)
                 out_file.writelines(post)
 
-    res.add_file(new_file)
-    return res
+    if not res.is_empty():
+        res.add_file(new_file)
+        return res
+
+    return None
 
 
 def redact_line(text, res: Results, *opts):

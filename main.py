@@ -10,7 +10,7 @@ import mainWindow_ui
 def save_options(window):
     """ Save options to file """
     QtCore.QSettings().setValue('options', (window.checkBoxIP.isChecked(),
-                                            window.checkBoxLogins.isChecked(),
+                                            window.checkBoxMachines.isChecked(),
                                             window.checkBoxMAC.isChecked(),
                                             window.checkBoxLogins.isChecked()))
 
@@ -19,7 +19,7 @@ def read_options(window):
     """ Read options from file """
     options = QtCore.QSettings().value('options', (True, True, True, True))
     window.checkBoxIP.setChecked(options[0])
-    window.checkBoxLogins.setChecked(options[1])
+    window.checkBoxMachines.setChecked(options[1])
     window.checkBoxMAC.setChecked(options[2])
     window.checkBoxLogins.setChecked(options[3])
 
@@ -55,7 +55,8 @@ def openfile(window):
     if file_path:
         res = Results()
         res = redactor.redact_file(file_path, *get_options(window))
-        add_results(window, res)
+        if not res == None:
+            add_results(window, res)
 
 
 def openfolder(window):
@@ -66,7 +67,8 @@ def openfolder(window):
         res = Results()
         for file_path in Path(folder_path).glob('*.txt'):
             res = redactor.redact_file(file_path, *get_options(window))
-            add_results(window, res)
+            if not res == None:
+                add_results(window, res)
 
 
 app = QtWidgets.QApplication(sys.argv)
@@ -77,7 +79,6 @@ read_options(ui)
 
 ui.pushButton_openFile.pressed.connect(lambda: openfile(ui))
 ui.pushButton_openFolder.pressed.connect(lambda: openfolder(ui))
-
 ui.tableWidget_results.setHorizontalHeaderLabels(
     ['IPs', 'MACs', 'Machines', 'Logins', 'File'])
 
