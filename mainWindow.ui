@@ -107,27 +107,32 @@
      </item>
     </layout>
    </widget>
-   <widget class="QListView" name="listView">
+   <widget class="QTableWidget" name="tableWidget_results">
     <property name="geometry">
      <rect>
-      <x>15</x>
+      <x>5</x>
       <y>151</y>
-      <width>771</width>
+      <width>791</width>
       <height>401</height>
      </rect>
     </property>
-    <property name="cursor" stdset="0">
-     <cursorShape>BlankCursor</cursorShape>
+    <property name="sortingEnabled">
+     <bool>true</bool>
     </property>
-    <property name="showDropIndicator" stdset="0">
-     <bool>false</bool>
+    <property name="columnCount">
+     <number>5</number>
     </property>
-    <property name="defaultDropAction">
-     <enum>Qt::IgnoreAction</enum>
-    </property>
-    <property name="selectionMode">
-     <enum>QAbstractItemView::NoSelection</enum>
-    </property>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>true</bool>
+    </attribute>
+    <attribute name="horizontalHeaderStretchLastSection">
+     <bool>true</bool>
+    </attribute>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

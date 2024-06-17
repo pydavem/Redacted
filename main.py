@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 from PyQt6 import QtWidgets, QtCore
 import redactor
+from results import Results
 import mainWindow_ui
 
 
@@ -31,12 +32,30 @@ def get_options(window):
             window.checkBoxLogins.isChecked())
 
 
+def add_results(window, res: Results):
+    """ Add results to table """
+    i = window.tableWidget_results.rowCount()
+    window.tableWidget_results.setRowCount(i + 1)
+    window.tableWidget_results.setItem(
+        i, 0, QtWidgets.QTableWidgetItem(str(res.ips)))
+    window.tableWidget_results.setItem(
+        i, 1, QtWidgets.QTableWidgetItem(str(res.macs)))
+    window.tableWidget_results.setItem(
+        i, 2, QtWidgets.QTableWidgetItem(str(res.machines)))
+    window.tableWidget_results.setItem(
+        i, 3, QtWidgets.QTableWidgetItem(str(res.logins)))
+    window.tableWidget_results.setItem(
+        i, 4, QtWidgets.QTableWidgetItem(res.file))
+
+
 def openfile(window):
     """ Open file dialog """
     file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
         None, "Open File", "", "All Files (*)")
     if file_path:
-        redactor.redact_file(file_path, *get_options(window))
+        res = Results()
+        res = redactor.redact_file(file_path, *get_options(window))
+        add_results(window, res)
 
 
 def openfolder(window):
@@ -44,8 +63,10 @@ def openfolder(window):
     folder_path = QtWidgets.QFileDialog.getExistingDirectory(
         None, "Open Folder")
     if folder_path:
+        res = Results()
         for file_path in Path(folder_path).glob('*.txt'):
-            redactor.redact_file(file_path, *get_options(window))
+            res = redactor.redact_file(file_path, *get_options(window))
+            add_results(window, res)
 
 
 app = QtWidgets.QApplication(sys.argv)
@@ -57,6 +78,8 @@ read_options(ui)
 ui.pushButton_openFile.pressed.connect(lambda: openfile(ui))
 ui.pushButton_openFolder.pressed.connect(lambda: openfolder(ui))
 
+ui.tableWidget_results.setHorizontalHeaderLabels(
+    ['IPs', 'MACs', 'Machines', 'Logins', 'File'])
 
 MainWindow.show()
 

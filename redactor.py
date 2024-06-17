@@ -2,6 +2,8 @@
 The meat of the machine, the redaction processes
 """
 
+from results import Results
+
 
 def get_out_filename(fnm):
     """ prepend 'redacted' to a file name string """
@@ -20,6 +22,7 @@ def get_out_filename(fnm):
 def redact_file(localfile, *opts):
     """ redact a single file """
     redactips, redactlogins, redactmachines, redactmacs = opts
+    res = Results()
 
     new_file = None
 
@@ -28,13 +31,14 @@ def redact_file(localfile, *opts):
         with open(new_file, 'w', encoding='utf-8') as out_file:
             for pre in in_file:
                 post = redact_line(
-                    pre, redactips, redactlogins, redactmachines, redactmacs)
+                    pre, res, redactips, redactlogins, redactmachines, redactmacs)
                 out_file.writelines(post)
 
-    return new_file
+    res.add_file(new_file)
+    return res
 
 
-def redact_line(text, *opts):
+def redact_line(text, res: Results, *opts):
     """ redact a single line """
     redactips, redactlogins, redactmachines, redactmacs = opts
     ret = text
@@ -64,6 +68,7 @@ def redact_line(text, *opts):
                     ret += text[last:start]
                     ret += 'x.x.x.x'
                     last = idx
+                    res.add_ip()
 
                 start = -1
                 maybe = 0
@@ -75,6 +80,7 @@ def redact_line(text, *opts):
             print(f'Found one at {start}')
             ret += text[last:start]
             ret += 'x.x.x.x'
+            res.add_ip()
         elif last < idx:
             # add any remaining characters to the string
             ret += text[last:]
@@ -87,6 +93,7 @@ def redact_line(text, *opts):
             if c == '@':
                 if idx:
                     ret = 'username'+ret[idx:]
+                    res.add_login()
                 break
             idx += 1
 
@@ -100,6 +107,7 @@ def redact_line(text, *opts):
                 start = idx
             if start and c == '>' or c == '$':
                 ret = ret[:start+1]+'machine'+ret[idx:]
+                res.add_machine()
                 break
             idx += 1
 
@@ -125,10 +133,13 @@ def redact_line(text, *opts):
                         if count == 12:
                             ret = ret[:start]+'--:--:--:--:--:--'+ret[idx+1:]
                             found = 1
+                            res.add_mac()
                             break
                 elif not c == ':':
                     start = -1
                     count = 0
+                else:
+                    digit = 0
                 idx += 1
 
     return ret
