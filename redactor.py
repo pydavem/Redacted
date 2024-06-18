@@ -1,7 +1,8 @@
 """
 The meat of the machine, the redaction processes
 """
-
+import os
+import mmap
 from results import Results
 
 
@@ -14,6 +15,7 @@ def get_out_filename(fnm):
         now = str(fname).find('/', last+1)
 
     if last >= 0:
+        # if we have previously generated it, leave it alone
         if fname[last+1:last+10] == 'redacted-':
             return None
         return fname[:last+1]+'redacted-'+fname[last+1:]
@@ -32,15 +34,28 @@ def redact_file(localfile, *opts):
         new_file = get_out_filename(localfile)
         if new_file is None:
             return None
-        with open(new_file, 'w', encoding='utf-8') as out_file:
+        file_stat = os.stat(localfile)
+        mm_size = 0
+        # use a memory mapped file, only write it to disk if redactions are performed
+        # we over-estimate the amount of memory required, just to be safe!
+        with mmap.mmap(-1, file_stat.st_size*2) as mm:
             for pre in in_file:
                 post = redact_line(
                     pre, res, redactips, redactlogins, redactmachines, redactmacs)
-                out_file.writelines(post)
+                mm.write(post.encode('utf-8'))
+                # remember the count written to memory for saving
+                mm_size += len(post)
 
-    if not res.is_empty():
-        res.add_file(new_file)
-        return res
+            if not res.is_empty():
+                mm.flush()
+                mm.seek(0)
+                with open(new_file, 'w+b') as out_file:
+                    out_file.write(mm.read(mm_size))
+                    # add our tag!
+                    out_file.write(b'\n\nRedacted by Redacted v1.0 from PyDaveM\n')
+
+                res.add_file(new_file)
+                return res
 
     return None
 

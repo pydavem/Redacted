@@ -55,7 +55,7 @@ def openfile(window):
     if file_path:
         res = Results()
         res = redactor.redact_file(file_path, *get_options(window))
-        if not res == None:
+        if not res is None:
             add_results(window, res)
 
 
@@ -67,7 +67,7 @@ def openfolder(window):
         res = Results()
         for file_path in Path(folder_path).glob('*.txt'):
             res = redactor.redact_file(file_path, *get_options(window))
-            if not res == None:
+            if not res is None:
                 add_results(window, res)
 
 
