@@ -27,23 +27,30 @@ def read_options(window):
 def get_options(window):
     """ Get options from checkboxes """
     return (window.checkBoxIP.isChecked(),
-            window.checkBoxLogins.isChecked(),
             window.checkBoxMAC.isChecked(),
+            window.checkBoxMachines.isChecked(),
             window.checkBoxLogins.isChecked())
+
+
+def make_item(count):
+    """ Make item for table """
+    item = QtWidgets.QTableWidgetItem(str(count))
+    item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+    return item
 
 
 def add_results(window, res: Results):
     """ Add results to table """
     i = window.tableWidget_results.rowCount()
     window.tableWidget_results.setRowCount(i + 1)
-    window.tableWidget_results.setItem(
-        i, 0, QtWidgets.QTableWidgetItem(str(res.ips)))
-    window.tableWidget_results.setItem(
-        i, 1, QtWidgets.QTableWidgetItem(str(res.macs)))
-    window.tableWidget_results.setItem(
-        i, 2, QtWidgets.QTableWidgetItem(str(res.machines)))
-    window.tableWidget_results.setItem(
-        i, 3, QtWidgets.QTableWidgetItem(str(res.logins)))
+    item = make_item(res.ips)
+    window.tableWidget_results.setItem(i, 0, item)
+    item = make_item(res.macs)
+    window.tableWidget_results.setItem(i, 1, item)
+    item = make_item(res.machines)
+    window.tableWidget_results.setItem(i, 2, item)
+    item = make_item(res.logins)
+    window.tableWidget_results.setItem(i, 3, item)
     window.tableWidget_results.setItem(
         i, 4, QtWidgets.QTableWidgetItem(res.file))
 
@@ -81,6 +88,15 @@ ui.pushButton_openFile.pressed.connect(lambda: openfile(ui))
 ui.pushButton_openFolder.pressed.connect(lambda: openfolder(ui))
 ui.tableWidget_results.setHorizontalHeaderLabels(
     ['IPs', 'MACs', 'Machines', 'Logins', 'File'])
+ui.tableWidget_results.horizontalHeaderItem(
+    0).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+ui.tableWidget_results.horizontalHeaderItem(
+    1).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+ui.tableWidget_results.horizontalHeaderItem(
+    2).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+ui.tableWidget_results.horizontalHeaderItem(
+    3).setTextAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+
 
 MainWindow.show()
 

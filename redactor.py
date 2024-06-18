@@ -25,7 +25,7 @@ def get_out_filename(fnm):
 
 def redact_file(localfile, *opts):
     """ redact a single file """
-    redactips, redactlogins, redactmachines, redactmacs = opts
+    redactips, redactmacs, redactmachines, redactlogins = opts
 
     res = Results()
     new_file = None
@@ -41,7 +41,7 @@ def redact_file(localfile, *opts):
         with mmap.mmap(-1, file_stat.st_size*2) as mm:
             for pre in in_file:
                 post = redact_line(
-                    pre, res, redactips, redactlogins, redactmachines, redactmacs)
+                    pre, res, redactips, redactmacs, redactmachines, redactlogins)
                 mm.write(post.encode('utf-8'))
                 # remember the count written to memory for saving
                 mm_size += len(post)
@@ -52,7 +52,8 @@ def redact_file(localfile, *opts):
                 with open(new_file, 'w+b') as out_file:
                     out_file.write(mm.read(mm_size))
                     # add our tag!
-                    out_file.write(b'\n\nRedacted by Redacted v1.0 from PyDaveM\n')
+                    out_file.write(
+                        b'\n\nRedacted by Redacted v1.0 from PyDaveM\n')
 
                 res.add_file(new_file)
                 return res
@@ -62,7 +63,7 @@ def redact_file(localfile, *opts):
 
 def redact_line(text, res: Results, *opts):
     """ redact a single line """
-    redactips, redactlogins, redactmachines, redactmacs = opts
+    redactips, redactmacs, redactmachines, redactlogins = opts
     ret = text
 
     if redactips:
